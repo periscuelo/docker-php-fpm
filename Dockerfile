@@ -1,4 +1,4 @@
-FROM php:7.3-fpm
+FROM php:fpm
 LABEL maintainer="Periscuelo"
 
 RUN requirements="nano cron mariadb-client libpng-dev libmcrypt-dev libmcrypt4 libcurl3-dev libzip-dev unzip libxml2-dev libfreetype6 libjpeg62-turbo libfreetype6-dev libjpeg62-turbo-dev" \
