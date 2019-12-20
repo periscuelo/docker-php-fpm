@@ -21,14 +21,14 @@ Now you are ready for the next step.
 ## Usage
 
 ### MAC or Linux
-`$ docker container run -d -p 9000:9000 -v $(pwd)/htdocs:/var/www/ periscuelo/php7.3-fpm`
+`$ docker container run -d -p 9000:9000 -v $(pwd)/htdocs:/var/www/ periscuelo/php-fpm`
 #### with php.ini
-`$ docker container run -d -p 9000:9000 -v $(pwd)/htdocs:/var/www/ -v $(pwd)/php.ini:/usr/local/etc/php/php.ini periscuelo/php7.3-fpm`
+`$ docker container run -d -p 9000:9000 -v $(pwd)/htdocs:/var/www/ -v $(pwd)/php.ini:/usr/local/etc/php/php.ini periscuelo/php-fpm`
 
 ### Windows PowerShell
-`$ docker container run -d -p 9000:9000 -v ${pwd}/htdocs:/var/www/ periscuelo/php7.3-fpm`
+`$ docker container run -d -p 9000:9000 -v ${pwd}/htdocs:/var/www/ periscuelo/php-fpm`
 #### with php.ini
-`$ docker container run -d -p 9000:9000 -v ${pwd}/htdocs:/var/www/ -v ${pwd}/php.ini:/usr/local/etc/php/php.ini periscuelo/php7.3-fpm`
+`$ docker container run -d -p 9000:9000 -v ${pwd}/htdocs:/var/www/ -v ${pwd}/php.ini:/usr/local/etc/php/php.ini periscuelo/php-fpm`
 
 
 ### docker-compose
@@ -41,7 +41,7 @@ version: '3'
 
 services:
   php:
-    image: periscuelo/php7.3-fpm
+    image: periscuelo/php-fpm
     ports:
       - 9000:9000
     volumes:
