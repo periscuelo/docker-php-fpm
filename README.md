@@ -74,4 +74,5 @@ And you come out of container.
 
 # Enjoy
 
-Put your PHP files in htdocs to access by command. Have fun =)
+Put your PHP files in htdocs to access by command. Have fun =)  
+Do you need to use NGINX with PHP FPM? Follow [this instructions](nginx.md).
