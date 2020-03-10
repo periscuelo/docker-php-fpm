@@ -11,6 +11,8 @@ RUN requirements="nano cron mariadb-client libpng-dev libmcrypt-dev libmcrypt4 l
     && docker-php-ext-install mbstring \
     && docker-php-ext-install soap \
     && docker-php-ext-install mysqli \
+    && docker-php-ext-install bcmath \
+    && docker-php-ext-install exif \
     && docker-php-ext-install zip \
     && requirementsToRemove="libmcrypt-dev libcurl3-dev libxml2-dev libfreetype6-dev libjpeg62-turbo-dev" \
     && apt-get purge --auto-remove -y $requirementsToRemove
@@ -21,6 +23,9 @@ ENV COMPOSER_ALLOW_SUPERUSER 1
 RUN curl -s https://getcomposer.org/installer | php \
 && mv composer.phar /usr/local/bin/composer \
 && chmod +x /usr/local/bin/composer
+
+RUN curl -s https://deb.nodesource.com/setup_12.x | bash \
+  && apt-get install -y nodejs
 
 RUN composer global require phpunit/phpunit
 
