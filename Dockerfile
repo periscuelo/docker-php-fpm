@@ -4,7 +4,8 @@ LABEL maintainer="Periscuelo"
 RUN requirements="nano cron mariadb-client libonig-dev libpng-dev libmcrypt-dev libmcrypt4 libcurl3-dev libzip-dev unzip libxml2-dev libfreetype6 libjpeg62-turbo libfreetype6-dev libjpeg62-turbo-dev" \
   && apt-get update && apt-get install -y --no-install-recommends $requirements && rm -rf /var/lib/apt/lists/* \
   && docker-php-ext-install pdo pdo_mysql \
-  && docker-php-ext-install gd \
+  && docker-php-ext-configure gd --with-freetype --with-jpeg \
+  && docker-php-ext-install -j$(nproc) gd \
   && pecl install mcrypt-1.0.3 \
   && docker-php-ext-enable mcrypt \
   && docker-php-ext-install mbstring \
