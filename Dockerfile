@@ -7,14 +7,13 @@ RUN requirements="nano cron mariadb-client libonig-dev libpng-dev libmcrypt-dev 
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j$(nproc) gd \
     && pecl install mcrypt-1.0.4 \
+    && pecl install xmlrpc-1.0.0RC2 \
     && docker-php-ext-enable mcrypt \
+    && docker-php-ext-enable xmlrpc \
     && docker-php-ext-install mbstring \
     && docker-php-ext-install soap \
     && docker-php-ext-install mysqli \
     && docker-php-ext-install bcmath \
-    && docker-php-ext-install exif \
-    && docker-php-ext-install intl \
-    && docker-php-ext-install xmlrpc \
     && docker-php-ext-install zip \
     && requirementsToRemove="libmcrypt-dev libcurl3-dev libxml2-dev libfreetype6-dev libjpeg62-turbo-dev" \
     && apt-get purge --auto-remove -y $requirementsToRemove
