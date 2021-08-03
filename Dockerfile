@@ -6,7 +6,7 @@ RUN requirements="nano cron mariadb-client libonig-dev libpng-dev libmcrypt-dev 
     && docker-php-ext-install pdo pdo_mysql \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j$(nproc) gd \
-    && pecl install mcrypt-1.0.3 \
+    && pecl install mcrypt-1.0.4 \
     && docker-php-ext-enable mcrypt \
     && docker-php-ext-install mbstring \
     && docker-php-ext-install soap \
