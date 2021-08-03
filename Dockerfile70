@@ -12,6 +12,8 @@ RUN requirements="nano cron mariadb-client libpng-dev libmcrypt-dev libmcrypt4 l
     && docker-php-ext-install mysqli \
     && docker-php-ext-install bcmath \
     && docker-php-ext-install exif \
+    && docker-php-ext-install intl \
+    && docker-php-ext-install xmlrpc \
     && docker-php-ext-install zip \
     && requirementsToRemove="libmcrypt-dev libcurl3-dev libxml2-dev libfreetype6-dev libjpeg62-turbo-dev" \
     && apt-get purge --auto-remove -y $requirementsToRemove
