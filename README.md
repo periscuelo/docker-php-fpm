@@ -1,4 +1,4 @@
-# PHP FPM + composer + PHPUnit
+# PHP FPM + Composer + XDebug + PHPUnit
 
 #### A simple docker configuration to use PHP FPM for development
 
