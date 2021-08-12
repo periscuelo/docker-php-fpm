@@ -33,5 +33,6 @@ RUN curl -s https://deb.nodesource.com/setup_14.x | bash \
 RUN composer global require phpunit/phpunit
 
 EXPOSE 9000
+EXPOSE 9003
 
 CMD ["php-fpm"]
