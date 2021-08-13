@@ -1,0 +1,1 @@
+GRANT ALL PRIVILEGES ON my_db.* TO 'myuser'@'%';

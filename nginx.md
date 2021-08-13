@@ -6,10 +6,11 @@ Below follow one example with laravel in port 80 and PHP in 443.
 If you don't want use laravel in port 80, just remove `/mylaravelproject/public` from `default.conf` file.
 
 ## Requiriments
-Have a local folder named htdocs and other named mysql
+Have a local folder named htdocs, one named mysql and other named mysql-dump
 
 `$ mkdir htdocs`  
 `$ mkdir mysql`
+`$ mkdir mysql-dump`
 
 For a test, make a file named index.php and save in htdocs folder created before.
 #### content of index.php
@@ -17,7 +18,7 @@ For a test, make a file named index.php and save in htdocs folder created before
 <?php phpinfo(); ?>
 ```
 
-And you can *create and edit* too the php.ini, default.conf and my.cnf as you need.  
+And you can *create and edit* too the php.ini, php-fpm.ini, default.conf and my.cnf as you need.  
 Now you are ready for the next step.
 
 ## Usage
@@ -99,6 +100,48 @@ post_max_size = 60M
 upload_max_filesize = 60M
 date.timezone = America/Sao_Paulo
 max_input_vars = 20000
+memory_limit = 512M
+zend_extension=opcache.so
+opcache.enable = 1
+opcache.memory_consumption = 128
+opcache.max_accelerated_files = 10000
+opcache.revalidate_freq = 60
+opcache.use_cwd = 1
+opcache.validate_timestamps = 1
+opcache.save_comments = 1
+opcache.enable_file_override = 0
+opcache.fast_shutdown = 1
+opcache.enable_cli = 1
+
+# xdebug php-fpm 7.0 or 7.1: uncomment below
+; xdebug.remote_enable = 1
+; xdebug.remote_autostart = 1
+; xdebug.remote_host = host.docker.internal
+; xdebug.remote_port = 9003
+; xdebug.remote_connect_back = 1
+; xdebug.idekey = VSCODE
+; xdebug.remote_log = /tmp/xdebug.log
+
+# xdebug php-fpm 7.3 or newer: uncomment below
+; xdebug.mode = debug
+; xdebug.start_with_request = yes
+; xdebug.client_host = host.docker.internal
+; xdebug.discover_client_host = 1
+; xdebug.idekey = VSCODE
+; xdebug.log = /tmp/xdebug.log
+```
+
+### php-fpm.ini
+
+```
+security.limit_extensions = .php
+pm = ondemand
+pm.max_children = 12
+pm.min_spare_servers = 2
+pm.max_spare_servers = 4
+pm.start_servers = 12
+pm.max_requests = 500
+pm.process_idle_timeout = 10s
 ```
 
 ### my.cnf
@@ -107,14 +150,14 @@ max_input_vars = 20000
 ```
 [mysqld]
 innodb_use_native_aio=0
-[mysql]
-user=root
-password=root
+max_allowed_packet=1024M
+innodb_buffer_pool_size=2048M
+innodb_log_buffer_size=512M
 ```
 
 ### docker-compose
 
-#### The `php.ini` volume is necessary only if you want change something there.
+#### The `php.ini` and `php-fpm.ini` volume is necessary only if you want change something there.
 
 ```
 # docker-compose.yml
@@ -140,19 +183,31 @@ services:
     volumes:
       - ./htdocs:/var/www/html
       - ./php.ini:/usr/local/etc/php/php.ini
+      - ./php-fpm.ini:/etc/php7/fpm/pool.d/www.conf
     depends_on:
-      - db
+      db:
+        condition: service_healthy
   db:
     image: mysql
+    cap_add:
+      - SYS_NICE
     command: --default-authentication-plugin=mysql_native_password
     restart: always
     ports:
       - 3306:3306
     environment:
-      MYSQL_ROOT_PASSWORD: root
+      - MYSQL_ROOT_PASSWORD=toor
+      - MYSQL_DATABASE=my_db
+      - MYSQL_USER=myuser
+      - MYSQL_PASSWORD=myuser
     volumes:
       - ./my.cnf:/etc/mysql/conf.d/my.cnf
-      - ../mysql:/var/lib/mysql
+      - ./mysql:/var/lib/mysql
+      - ./mysql-dump:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: mysqladmin ping -h 127.0.0.1 -u $$MYSQL_USER --password=$$MYSQL_PASSWORD
+      timeout: 10s
+      retries: 10
 ```
 `$ docker-compose up -d`
 
