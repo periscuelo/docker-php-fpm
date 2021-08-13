@@ -9,7 +9,7 @@ If you don't want use laravel in port 80, just remove `/mylaravelproject/public`
 Have a local folder named htdocs, one named mysql and other named mysql-dump
 
 `$ mkdir htdocs`  
-`$ mkdir mysql`
+`$ mkdir mysql`  
 `$ mkdir mysql-dump`
 
 For a test, make a file named index.php and save in htdocs folder created before.
