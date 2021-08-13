@@ -167,7 +167,7 @@ innodb_log_buffer_size=512M
 
 ```
 # docker-compose.yml
-version: '3'
+version: '3.8'
 
 services:
   webserver:
