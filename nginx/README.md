@@ -18,6 +18,12 @@ For a test, make a file named index.php and save in htdocs folder created before
 <?php phpinfo(); ?>
 ```
 
+And inside of mysql-dump put one file named grant_privileges.sql with below:
+#### content of grant_privileges.sql
+```
+GRANT ALL PRIVILEGES ON my_db.* TO 'myuser'@'%';
+```
+
 And you can *create and edit* too the php.ini, php-fpm.ini, default.conf and my.cnf as you need.  
 Now you are ready for the next step.
 
