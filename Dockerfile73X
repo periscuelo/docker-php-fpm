@@ -1,4 +1,4 @@
-FROM php:7.0-fpm
+FROM php:7.3-fpm
 LABEL maintainer="Periscuelo"
 
 RUN requirements="nano cron mariadb-client libpng-dev libmcrypt-dev libmcrypt4 libcurl3-dev libzip-dev unzip libxml2-dev libfreetype6 libjpeg62-turbo libfreetype6-dev libjpeg62-turbo-dev" \
@@ -6,7 +6,10 @@ RUN requirements="nano cron mariadb-client libpng-dev libmcrypt-dev libmcrypt4 l
     && docker-php-ext-install pdo pdo_mysql \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
     && docker-php-ext-install gd \
-    && docker-php-ext-install mcrypt \
+    && pecl install mcrypt-1.0.3 \
+    && pecl install xdebug-3.0.4 \
+    && docker-php-ext-enable mcrypt \
+    && docker-php-ext-enable xdebug \
     && docker-php-ext-install mbstring \
     && docker-php-ext-install soap \
     && docker-php-ext-install mysqli \
@@ -31,5 +34,6 @@ RUN curl -s https://deb.nodesource.com/setup_14.x | bash \
 RUN composer global require phpunit/phpunit
 
 EXPOSE 9000
+EXPOSE 9003
 
 CMD ["php-fpm"]

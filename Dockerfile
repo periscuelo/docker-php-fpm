@@ -8,10 +8,8 @@ RUN requirements="nano cron mariadb-client libonig-dev libpng-dev libmcrypt-dev 
     && docker-php-ext-install -j$(nproc) gd \
     && pecl install mcrypt-1.0.4 \
     && pecl install xmlrpc-1.0.0RC2 \
-    && pecl install xdebug-3.0.4 \
     && docker-php-ext-enable mcrypt \
     && docker-php-ext-enable xmlrpc \
-    && docker-php-ext-enable xdebug \
     && docker-php-ext-install mbstring \
     && docker-php-ext-install soap \
     && docker-php-ext-install mysqli \
@@ -33,6 +31,5 @@ RUN curl -s https://deb.nodesource.com/setup_14.x | bash \
 RUN composer global require phpunit/phpunit
 
 EXPOSE 9000
-EXPOSE 9003
 
 CMD ["php-fpm"]
