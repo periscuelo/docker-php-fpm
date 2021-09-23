@@ -191,7 +191,10 @@ innodb_log_buffer_size=512M
 
 #### The `php.ini` and `php-fpm.ini` volume is necessary only if you want change something there.
 
->If you don't need of xdebug you can avoid the php_xdebug service
+>If you don't need of xdebug you can avoid the php_xdebug service  
+>But if you will use with nginx just add xdebug=1 on your URL to debug.
+>
+>Ex: `https://localhost/?xdebug=1`
 
 ```
 # docker-compose.yml
