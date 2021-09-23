@@ -15,7 +15,7 @@ For a test, make a file named index.php and save in htdocs folder created before
 <?php phpinfo(); ?>
 ```
 
-And you can *create and edit* too the php.ini as you need.
+And you can *create and edit* too the php.ini as you need.  
 Now you are ready for the next step.
 
 ## Usage
@@ -34,11 +34,6 @@ Now you are ready for the next step.
 ### docker-compose
 
 #### The `php.ini` volume is necessary only if you want change something there.
-> #### XDebug
-> You can use xdebug alone just choosing the image with xdebug.
-> But can be slowest because of xdebug. One workaround is use
-> another container with xdebug. Then, if this is not your case
-> you can skip the php_xdebug service if you wanna.
 
 ```
 # docker-compose.yml
@@ -52,13 +47,6 @@ services:
     volumes:
       - ./htdocs:/var/www
       - ./php.ini:/usr/local/etc/php/php.ini
-  php_xdebug:
-    image: periscuelo/php-fpm:latest-XDebug
-    ports:
-      - 9001:9000
-    volumes:
-      - ./htdocs:/var/www
-      - ./xdebug.ini:/usr/local/etc/php/php.ini
 ```
 `$ docker-compose up -d`
 
@@ -67,17 +55,17 @@ You can use the `composer` too. For this, use the following command:
 
 `$ docker exec -it ID_OR_NAME_OF_YOUR_CONTAINER bash`
 
-You have to replace `ID_OR_NAME_OF_YOUR_CONTAINER` for  the respective Container ID or Container NAME.
+You have to replace `ID_OR_NAME_OF_YOUR_CONTAINER` for  the respective Container ID or Container NAME.  
 Ex: If my container id is f3c99c3239ex then, the command must be:
 
 `$ docker exec -it f3c99c3239ex bash`
 
-Inside the terminal you can use the `composer` as you want.
+Inside the terminal you can use the `composer` as you want.  
 For example:
 
 `$ composer create-project phpmyadmin/phpmyadmin`
 
-You can use phpmyadmin to made changes in your MySQL Database.
+You can use phpmyadmin to made changes in your MySQL Database.  
 For exit of terminal after, the command must be:
 
 `$ exit`
@@ -86,5 +74,5 @@ And you come out of container.
 
 # Enjoy
 
-Put your PHP files in htdocs to access by command. Have fun =)
+Put your PHP files in htdocs to access by command. Have fun =)  
 Do you need to use NGINX with PHP FPM? Follow [this instructions](https://github.com/periscuelo/docker-php-fpm/blob/master/nginx.md).

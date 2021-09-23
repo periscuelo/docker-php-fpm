@@ -24,7 +24,23 @@ And inside of mysql-dump put one file named grant_privileges.sql with below:
 GRANT ALL PRIVILEGES ON my_db.* TO 'myuser'@'%';
 ```
 
-And you can *create and edit* too the php.ini, php-fpm.ini, default.conf and my.cnf as you need.  
+And you can *create and edit* too the php.ini, php-fpm.ini, default.conf, xdebug.ini and my.cnf as you need.
+
+You can skip the xdebug service if you wanna. But is a good workaround to avoid be slow, using this in another container.
+
+If you don't need of xdebug you can change below in default.conf of nginx:
+
+```
+fastcgi_pass php:9000;
+if ($arg_xdebug) {
+    fastcgi_pass php_xdebug:9000;
+}
+```
+
+to
+
+`fastcgi_pass php:9000;`
+
 Now you are ready for the next step.
 
 ## Usage
@@ -60,7 +76,12 @@ server {
     location ~ \.php$ {
         try_files $uri =404;
         fastcgi_split_path_info ^(.+\.php)(/.+)$;
+
         fastcgi_pass php:9000;
+        if ($arg_xdebug) {
+            fastcgi_pass php_xdebug:9000;
+        }
+
         fastcgi_index index.php;
         include fastcgi_params;
         fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
@@ -89,7 +110,12 @@ server {
     location ~ \.php$ {
         try_files $uri =404;
         fastcgi_split_path_info ^(.+\.php)(/.+)$;
+
         fastcgi_pass php:9000;
+        if ($arg_xdebug) {
+            fastcgi_pass php_xdebug:9000;
+        }
+
         fastcgi_index index.php;
         include fastcgi_params;
         fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
@@ -119,7 +145,7 @@ opcache.enable_file_override = 0
 opcache.fast_shutdown = 1
 opcache.enable_cli = 1
 
-# xdebug php-fpm 7.0 or 7.1: uncomment below
+# xdebug php-fpm 7.0 or 7.1: use below on xdebug.ini
 ; xdebug.remote_enable = 1
 ; xdebug.remote_autostart = 1
 ; xdebug.remote_host = host.docker.internal
@@ -128,7 +154,7 @@ opcache.enable_cli = 1
 ; xdebug.idekey = VSCODE
 ; xdebug.remote_log = /tmp/xdebug.log
 
-# xdebug php-fpm 7.3 or newer: uncomment below
+# xdebug php-fpm 7.3 or newer: use below on xdebug.ini
 ; xdebug.mode = debug
 ; xdebug.start_with_request = yes
 ; xdebug.client_host = host.docker.internal
@@ -165,6 +191,8 @@ innodb_log_buffer_size=512M
 
 #### The `php.ini` and `php-fpm.ini` volume is necessary only if you want change something there.
 
+>If you don't need of xdebug you can avoid the php_xdebug service
+
 ```
 # docker-compose.yml
 version: '3.8'
@@ -193,6 +221,13 @@ services:
     depends_on:
       db:
         condition: service_healthy
+  php_xdebug:
+    image: periscuelo/php-fpm:7.3-XDebug
+    ports:
+      - 9001:9000
+    volumes:
+      - ./htdocs:/var/www/html
+      - ./xdebug.ini:/usr/local/etc/php/php.ini
   db:
     image: mysql
     cap_add:

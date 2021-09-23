@@ -24,6 +24,13 @@ services:
     depends_on:
       db:
         condition: service_healthy
+  php_xdebug:
+    image: periscuelo/php-fpm:7.3-XDebug
+    ports:
+      - 9001:9000
+    volumes:
+      - ./htdocs:/var/www/html
+      - ./xdebug.ini:/usr/local/etc/php/php.ini
   db:
     image: mysql
     cap_add:
